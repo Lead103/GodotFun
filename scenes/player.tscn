@@ -1,12 +1,12 @@
 [gd_scene load_steps=43 format=3 uid="uid://bif1lc0rxnd1r"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_fohol"]
-[ext_resource type="PackedScene" uid="uid://cd1cfa6ctqycg" path="res://components/Gravity/gravity_component.tscn" id="3_2ihr1"]
 [ext_resource type="Texture2D" uid="uid://di8upofq66op" path="res://Assets/sprites/adventurer-Sheet.png" id="3_3xbr6"]
-[ext_resource type="PackedScene" uid="uid://mynxlljffvsr" path="res://components/Input/input_component.tscn" id="4_1sd5v"]
-[ext_resource type="PackedScene" uid="uid://cl114gre16q6m" path="res://components/Movement/movement_component.tscn" id="5_pjvdy"]
-[ext_resource type="PackedScene" uid="uid://cu3bw3yo2cdl7" path="res://components/Animation/custom_animation_component.tscn" id="6_clbvb"]
-[ext_resource type="PackedScene" uid="uid://qk6jtnyjxki4" path="res://components/jump_component.tscn" id="7_26i8l"]
+[ext_resource type="Script" path="res://FSM/FSM.gd" id="3_ubybh"]
+[ext_resource type="Script" path="res://FSM/IdleState.gd" id="4_gpcyf"]
+[ext_resource type="Script" path="res://FSM/MoveState.gd" id="5_neytt"]
+[ext_resource type="Script" path="res://FSM/JumpState.gd" id="6_xhg2y"]
+[ext_resource type="Script" path="res://FSM/DashState.gd" id="7_12qq7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7w1kp"]
 atlas = ExtResource("3_3xbr6")
@@ -268,39 +268,38 @@ animations = [{
 "texture": SubResource("AtlasTexture_axkri")
 }],
 "loop": false,
-"name": &"run",
+"name": &"move",
 "speed": 20.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_st0gw"]
 size = Vector2(10, 26)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("gravity_component", "input_component", "movement_component", "custom_animation_component", "jump_componenent")]
+[node name="Player" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 2
 script = ExtResource("1_fohol")
-gravity_component = NodePath("GravityComponent")
-input_component = NodePath("InputComponent")
-movement_component = NodePath("MovementComponent")
-custom_animation_component = NodePath("AnimationComponent")
-jump_componenent = NodePath("JumpComponent")
 
-[node name="animated_sprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_qotdf")
-animation = &"jump"
+animation = &"move"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_st0gw")
 
-[node name="GravityComponent" parent="." instance=ExtResource("3_2ihr1")]
+[node name="FSM" type="Node2D" parent="."]
+script = ExtResource("3_ubybh")
 
-[node name="InputComponent" parent="." instance=ExtResource("4_1sd5v")]
+[node name="IdleState" type="Node" parent="FSM"]
+script = ExtResource("4_gpcyf")
 
-[node name="MovementComponent" parent="." instance=ExtResource("5_pjvdy")]
+[node name="MoveState" type="Node" parent="FSM"]
+script = ExtResource("5_neytt")
 
-[node name="AnimationComponent" parent="." node_paths=PackedStringArray("sprite") instance=ExtResource("6_clbvb")]
-sprite = NodePath("../animated_sprite2D")
+[node name="JumpState" type="Node" parent="FSM"]
+script = ExtResource("6_xhg2y")
 
-[node name="JumpComponent" parent="." instance=ExtResource("7_26i8l")]
+[node name="DashState" type="Node" parent="FSM"]
+script = ExtResource("7_12qq7")
