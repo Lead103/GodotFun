@@ -9,6 +9,7 @@ func _ready():
 
 func set_state(state_name: String):
 	if current_state != null:
+		print("Exiting state:", current_state.name)
 		current_state.call("exit")
 	
 	var new_state = get_node(state_name)

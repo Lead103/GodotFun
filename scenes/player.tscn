@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bif1lc0rxnd1r"]
+[gd_scene load_steps=45 format=3 uid="uid://bif1lc0rxnd1r"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_fohol"]
 [ext_resource type="Texture2D" uid="uid://di8upofq66op" path="res://Assets/sprites/adventurer-Sheet.png" id="3_3xbr6"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://FSM/MoveState.gd" id="5_neytt"]
 [ext_resource type="Script" path="res://FSM/JumpState.gd" id="6_xhg2y"]
 [ext_resource type="Script" path="res://FSM/DashState.gd" id="7_12qq7"]
+[ext_resource type="Script" path="res://FSM/AttackState.gd" id="8_sjfu2"]
+[ext_resource type="Script" path="res://FSM/AirState.gd" id="9_vhjyj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7w1kp"]
 atlas = ExtResource("3_3xbr6")
@@ -282,7 +284,7 @@ script = ExtResource("1_fohol")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_qotdf")
-animation = &"move"
+animation = &"air"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -303,3 +305,11 @@ script = ExtResource("6_xhg2y")
 
 [node name="DashState" type="Node" parent="FSM"]
 script = ExtResource("7_12qq7")
+
+[node name="AttackState" type="Node" parent="FSM"]
+script = ExtResource("8_sjfu2")
+
+[node name="AirState" type="Node" parent="FSM"]
+script = ExtResource("9_vhjyj")
+
+[node name="JumpParticles" type="GPUParticles2D" parent="."]

@@ -28,13 +28,19 @@ func update(delta):
 		anim_sprite.flip_h = direction < 0
 		print("Animation Flipped: ", anim_sprite.flip_h)
 
-	if direction == 0:
-		get_parent().set_state("IdleState")
-	elif Input.is_action_just_pressed("jump"):
-		get_parent().set_state("JumpState")
-	elif Input.is_action_just_pressed("dash") and player.dash_count < player.max_dashes:
-		get_parent().set_state("DashState")
+# Check for state transitions
+	if player.is_on_floor():
+		if direction == 0:
+			get_parent().set_state("IdleState")
+		elif Input.is_action_just_pressed("jump"):
+			get_parent().set_state("JumpState")
+		elif Input.is_action_just_pressed("attack"):
+			get_parent().set_state("AttackState")
+		elif Input.is_action_just_pressed("dash") and player.dash_count < player.max_dashes:
+			get_parent().set_state("DashState")
+		else:
+			# Ensure the move animation continues to play while moving
+			if not anim_sprite.is_playing():
+				anim_sprite.play("move")
 	else:
-		# Ensure the move animation continues to play while moving
-		if not anim_sprite.is_playing():
-			anim_sprite.play("move")
+		get_parent().set_state("AirState")

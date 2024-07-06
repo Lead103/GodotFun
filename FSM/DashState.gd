@@ -27,16 +27,17 @@ func enter():
 	anim_sprite.flip_h = direction < 0
 
 func exit():
-	player.velocity.x = 0
+	player.velocity.x = 0  # Stop horizontal movement after dash
 	print("Exited Dash State, ending Dash Animation")
 
 func update(delta):
 	dash_timer -= delta
 	if dash_timer <= 0:
+		player.velocity.x = 0  # Ensure horizontal velocity is reset after dash
 		if player.is_on_floor():
 			get_parent().set_state("IdleState")
 		else:
-			get_parent().set_state("JumpState")
+			get_parent().set_state("AirState")
 
 	# Apply gravity during dash
 	player.velocity.y += player.gravity * delta

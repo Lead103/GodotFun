@@ -19,3 +19,5 @@ func update(delta):
 		get_parent().set_state("JumpState")
 	elif Input.is_action_just_pressed("dash") and player.dash_count < player.max_dashes:
 		get_parent().set_state("DashState")
+	elif Input.is_action_just_pressed("attack"):  # Change 'attack' to your actual attack input action
+		get_parent().set_state("AttackState")
